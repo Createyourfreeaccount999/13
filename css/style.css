@@ -1,0 +1,46 @@
+body {
+  font-family: sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.board {
+  display: flex;
+  gap: 10px;
+}
+
+.column {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.card {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.card .status {
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+button {
+  margin-top: 6px;
+  padding: 5px 10px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1565c0;
+}
