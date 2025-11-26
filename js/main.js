@@ -75,21 +75,43 @@ new Vue({
     cards: []
   },
   methods: {
+    pickDate(defaultDate) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        const dialog = document.createElement('div');
+        const input = document.createElement('input');
+        input.type = 'date';
+        input.value = defaultDate;
+        const okButton = document.createElement('button');
+        okButton.textContent = 'ОК';
+        okButton.onclick = () => {
+          resolve(input.value);
+          document.body.removeChild(overlay);
+        };
+        dialog.appendChild(input);
+        dialog.appendChild(okButton);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+        input.focus();
+      });
+    },
+
     createCard(columnId = 'planned') {
       const title = prompt("Введите заголовок задачи:");
       if (!title) return;
       const description = prompt("Введите описание задачи:");
-      const deadline = prompt("Введите дэдлайн (например, 2025-09-20):");
-      const now = new Date().toLocaleString();
-      this.cards.push({
-        id: Date.now(),
-        title,
-        description,
-        deadline,
-        createdAt: now,
-        updatedAt: now,
-        columnId,
-        returnReason: ''
+      this.pickDate(new Date().toISOString().slice(0, 10)).then(deadline => {
+        const now = new Date().toLocaleString();
+        this.cards.push({
+          id: Date.now(),
+          title,
+          description,
+          deadline,
+          createdAt: now,
+          updatedAt: now,
+          columnId,
+          returnReason: ''
+        });
       });
     },
     editCard(card) {
@@ -97,9 +119,10 @@ new Vue({
       if (newTitle) card.title = newTitle;
       const newDesc = prompt("Введите новое описание:", card.description);
       if (newDesc) card.description = newDesc;
-      const newDeadline = prompt("Введите новый дэдлайн:", card.deadline);
-      if (newDeadline) card.deadline = newDeadline;
-      card.updatedAt = new Date().toLocaleString();
+      this.pickDate(card.deadline).then(newDeadline => {
+        if (newDeadline) card.deadline = newDeadline;
+        card.updatedAt = new Date().toLocaleString();
+      });
     },
     deleteCard(cardId) {
       this.cards = this.cards.filter(c => c.id !== cardId);
